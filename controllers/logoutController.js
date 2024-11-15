@@ -5,7 +5,7 @@ export async function logout (req,res,next){
     res.clearCookie('token',{
         httpOnly:true,
         secure:process.env.NODE_ENV === 'production',
-        sameSite:'Strict',
+        sameSite:'none',
         path:'/'
     });
     return res.json({message:'Logout Successful'});
