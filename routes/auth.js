@@ -33,7 +33,7 @@ authRouter.get('/auth/google/callback', (req, res, next) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-            sameSite: 'Strict'
+            sameSite: 'none'
         });
 
         res.redirect(`${process.env.FRONTEND_URL}`);
