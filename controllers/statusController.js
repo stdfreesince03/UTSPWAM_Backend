@@ -3,6 +3,7 @@ import jsonwebtoken from "jsonwebtoken";
 export async function loggedInStatus(req,res,next){ //for frontend
     // console.log('auth/check');
     const token =req.cookies.token;
+    console.log('token',token);
     if(!token){
         return res.json({isLoggedIn:false});
     }
