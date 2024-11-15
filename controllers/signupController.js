@@ -31,7 +31,7 @@ export async function signUp(req,res){
             .select();
 
         if (insertError) {
-            console.log(insertError);
+            // console.log(insertError);
             return res.status(400).json({ error: 'Signup Error' });
         }
 
