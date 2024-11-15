@@ -8,7 +8,7 @@ export async function loggedInStatus(req,res,next){ //for frontend
         console.log('wtf');
         return res.json({isLoggedIn:false});
     }
-    // console.log(token);
+    console.log(token);
     try{
         const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY);
         if(decoded){
