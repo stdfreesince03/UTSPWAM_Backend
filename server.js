@@ -105,10 +105,10 @@ app.post('/progress', authenticateJWT, async (req, res) => {
     const { id: user_id, role } = req.user;  // Extracted from JWT by middleware
     const { lab_id, score } = req.body;      // Passed from the frontend
 
-    console.log('id : ', user_id);
-    console.log('role : ', role);
-    console.log('lab_id : ', lab_id);
-    console.log('score : ', score);
+    // console.log('id : ', user_id);
+    // console.log('role : ', role);
+    // console.log('lab_id : ', lab_id);
+    // console.log('score : ', score);
     try {
         const { data, error } = await db
             .from('lab_progress')
@@ -123,7 +123,7 @@ app.post('/progress', authenticateJWT, async (req, res) => {
         res.status(201).json({ message: 'Progress saved successfully' });
     } catch (error) {
         console.error('Error saving progress:', error);
-        res.status(500).json({ message: 'Error saving progress BITCH' });
+        res.status(500).json({ message: 'Error saving progress BITCH',user_id,role,lab_id,score});
     }
 });
 // app.get('/api/test-supabase-connection', async (req, res) => {
