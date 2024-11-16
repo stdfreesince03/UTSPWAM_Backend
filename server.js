@@ -145,7 +145,7 @@ app.post('/progress', authenticateJWT, async (req, res) => {
         const { data, error:insertError } = await db
             .from('lab_progress')
             .upsert(
-                { user_id, role, lab_id, score },
+                { user_id, lab_id },
                 { onConflict: ['user_id', 'lab_id'] }
             )
             .select();
