@@ -111,21 +111,23 @@ app.post('/progress', authenticateJWT, async (req, res) => {
     // console.log('score : ', score);
     score = parseInt(score, 10);
 
+    let wtf = null;
+
     try {
-        const { data, error } = await db
+        const { data, error:insertError } = await db
             .from('lab_progress')
             .upsert({ user_id, role, lab_id, score })
             .select();
-
-        if (error) {
-            console.log('insert error');
-            throw error;
+        wtf = insertError;
+        if (insertError) {
+            console.log(insertError);
+            throw insertError;
         }
 
         res.status(201).json({ message: 'Progress saved successfully' });
     } catch (error) {
-        console.error('Error saving progress:', error);
-        res.status(500).json({ message: 'Error saving progress BITCH',user_id,role,lab_id,score});
+        console.error('Error saving progress:', error,wtf);
+        res.status(500).json({ message: 'Error saving progress BITCH',user_id,role,lab_id,score,wtf});
     }
 });
 // app.get('/api/test-supabase-connection', async (req, res) => {
