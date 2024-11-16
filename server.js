@@ -109,6 +109,7 @@ app.post('/progress', authenticateJWT, async (req, res) => {
     // console.log('role : ', role);
     // console.log('lab_id : ', lab_id);
     // console.log('score : ', score);
+
     score = parseInt(score, 10);
     lab_id = parseInt(lab_id,10);
 
