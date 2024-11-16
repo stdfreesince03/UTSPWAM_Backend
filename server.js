@@ -88,7 +88,7 @@ passport.use(
                     {
                         id: role === 'instructor' ? hawktuah.instructor_id : hawktuah.student_id,
                         role,
-                        email: user.email,
+                        email: hawktuah.email,
                     },
                     process.env.JWT_SECRET_KEY
                 );
@@ -103,6 +103,29 @@ passport.use(
 );
 
 app.use(authRouter);
+
+app.get('/progress/:labID',authenticateJWT,async(req,res,next) => {
+    const { id: user_id } = req.user;  // Extracts user_id from JWT
+    const { lab_id } = req.params;     // Extracts lab_id from the URL
+
+    try {
+        const { data, error } = await db
+            .from('lab_progress')
+            .select('score')
+            .eq('user_id', user_id)
+            .eq('lab_id', lab_id)
+            .single();
+
+        if (error) {
+            throw error;
+        }
+
+        res.status(200).json({ score: data ? data.score : 0 });
+    } catch (error) {
+        console.error('Error fetching progress:', error);
+        res.status(500).json({ message: 'Error fetching progress' });
+    }
+});
 
 app.post('/progress', authenticateJWT, async (req, res) => {
     const { id: user_id, role } = req.user;
@@ -151,6 +174,7 @@ app.post('/progress', authenticateJWT, async (req, res) => {
 //         res.status(500).json({ error: 'Database connection error' });
 //     }
 // });
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
