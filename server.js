@@ -106,24 +106,38 @@ app.use(authRouter);
 
 app.get('/progress/:labID',authenticateJWT,async(req,res,next) => {
     const { id: user_id } = req.user;
-    const { labID:lab_id } = req.params;
-    let shit = null;
+    const { labID: lab_id } = req.params;
+
     try {
+
         const { data, error } = await db
             .from('lab_progress')
             .select('score')
             .eq('user_id', user_id)
             .eq('lab_id', lab_id)
             .single();
-        shit = error;
-        if (error) {
+
+        if (error && error.code !== 'PGRST404') {
             throw error;
         }
 
-        res.status(200).json({ score: data ? data.score : 0 ,shit});
+        if (!data) {
+            const { data: newEntry, error: insertError } = await db
+                .from('lab_progress')
+                .upsert({ user_id, lab_id, role: req.user.role, score: 0 })
+                .single();
+
+            if (insertError) {
+                throw insertError;
+            }
+
+            return res.status(200).json({ score: newEntry.score });
+        }
+
+        res.status(200).json({ score: data.score });
     } catch (error) {
-        console.error('Error fetching progress:', error);
-        res.status(500).json({ message: 'Error fetching progress' ,shit});
+        console.error('Error fetching or inserting progress:', error);
+        res.status(500).json({ message: 'Error fetching progress' });
     }
 });
 
