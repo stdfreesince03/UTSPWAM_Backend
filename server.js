@@ -65,7 +65,7 @@ passport.use(
 
                 hawktuah = user;
 
-                if (!user) {
+                if (!hawktuah) {
                     const { data: newUser, error: insertError } = await db
                         .from(role)
                         .upsert({
