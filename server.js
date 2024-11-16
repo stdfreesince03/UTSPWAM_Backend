@@ -107,7 +107,7 @@ app.use(authRouter);
 app.get('/progress/:labID',authenticateJWT,async(req,res,next) => {
     const { id: user_id } = req.user;  // Extracts user_id from JWT
     const { lab_id } = req.params;     // Extracts lab_id from the URL
-
+    let shit = null;
     try {
         const { data, error } = await db
             .from('lab_progress')
@@ -115,15 +115,15 @@ app.get('/progress/:labID',authenticateJWT,async(req,res,next) => {
             .eq('user_id', user_id)
             .eq('lab_id', lab_id)
             .single();
-
+        shit = error;
         if (error) {
             throw error;
         }
 
-        res.status(200).json({ score: data ? data.score : 0 });
+        res.status(200).json({ score: data ? data.score : 0 ,shit});
     } catch (error) {
         console.error('Error fetching progress:', error);
-        res.status(500).json({ message: 'Error fetching progress' });
+        res.status(500).json({ message: 'Error fetching progress' ,shit});
     }
 });
 
