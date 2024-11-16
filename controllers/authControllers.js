@@ -102,7 +102,7 @@ export async function signUp(req,res){
             maxAge: 30 * 24 * 60 * 60 * 1000  // 30 days
         });
 
-        return res.json({ message: 'Signup Successful', user: { email, role } });
+        return res.json({ message: 'Signup Successful', user: { email, role }, });
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: 'Internal server error' });
@@ -113,7 +113,6 @@ export async function signUp(req,res){
 export async function loggedInStatus(req,res,next) { //for frontend
     // console.log('auth/check');
     const token = req.cookies.token;
-
 
     if (!token) {
         console.log('wtf');
