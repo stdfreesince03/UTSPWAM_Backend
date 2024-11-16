@@ -1,9 +1,7 @@
 import express from "express";
-import {login} from "../controllers/loginControllers.js";
-import {signUp} from "../controllers/signupController.js";
-import {loggedInStatus} from "../controllers/statusController.js";
-import {logout} from "../controllers/logoutController.js";
 import passport from "passport";
+import {loggedInStatus,signUp,logout,login} from "../controllers/authControllers";
+
 
 const authRouter = express.Router();
 

@@ -102,8 +102,8 @@ passport.use(
 app.use(authRouter);
 
 app.post('/progress', authenticateJWT, async (req, res) => {
-    const { id: user_id, role } = req.user;  // Extracted from JWT by middleware
-    let { lab_id, score } = req.body;      // Passed from the frontend
+    const { id: user_id, role } = req.user;
+    let { lab_id, score } = req.body;
 
     // console.log('id : ', user_id);
     // console.log('role : ', role);
