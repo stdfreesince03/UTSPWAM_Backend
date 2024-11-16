@@ -143,21 +143,15 @@ app.get('/progress/:labID', authenticateJWT, async (req, res, next) => {
     const { labID: lab_id } = req.params;
     let temp = null;
 
-    try {
-        const { data, error } = await db
+
+    const { data, error } = await db
             .from('lab_progress')
             .select('score')
             .eq('user_id', user_id)
             .eq('lab_id', lab_id)
-            .single();
+            .maybeSingle();
 
-        if (error) throw error; // Throw if there's an error in select
-
-        temp = data;
-    } catch (selectError) {
-        console.error('Error fetching existing progress:', selectError);
-        return res.status(500).json({ message: 'Error fetching existing progress',user_id,lab_id });
-    }
+    temp = data;
 
     if (!temp) {
         try {
