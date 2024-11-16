@@ -156,7 +156,7 @@ app.get('/progress/:labID', authenticateJWT, async (req, res, next) => {
         temp = data;
     } catch (selectError) {
         console.error('Error fetching existing progress:', selectError);
-        return res.status(500).json({ message: 'Error fetching existing progress' });
+        return res.status(500).json({ message: 'Error fetching existing progress',user_id,lab_id });
     }
 
     if (!temp) {
