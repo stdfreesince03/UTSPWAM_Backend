@@ -105,8 +105,8 @@ passport.use(
 app.use(authRouter);
 
 app.get('/progress/:labID',authenticateJWT,async(req,res,next) => {
-    const { id: user_id } = req.user;  // Extracts user_id from JWT
-    const { lab_id } = req.params;     // Extracts lab_id from the URL
+    const { id: user_id } = req.user;
+    const { labID:lab_id } = req.params;
     let shit = null;
     try {
         const { data, error } = await db
