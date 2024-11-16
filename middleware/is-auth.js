@@ -9,7 +9,7 @@ export async function authenticateJWT(req, res, next) {
     try {
         console.log('jtw authenticated');
         const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY);
-        req.user = { id: decoded.id, role: decoded.role };  // Attach `id` and `role` to `req.user`
+        req.user = { id: decoded.id, role: decoded.role };
         console.log('jtw authenticated ,user = ',req.user);
         next();
     } catch (error) {
