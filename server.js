@@ -165,7 +165,7 @@ app.get('/progress/:labID', authenticateJWT, async (req, res, next) => {
             temp = newData;
         } catch (upsertError) {
             console.error('Error inserting new progress:', upsertError);
-            return res.status(500).json({ message: 'Error inserting new progress' });
+            return res.status(500).json({ message: 'Error inserting new progress' ,upsertError});
         }
     }
 
