@@ -110,14 +110,16 @@ app.get('/progress/:labID',authenticateJWT,async(req,res,next) => {
 
     let temp = null;
 
+    let { data, error } = await db
+        .from('lab_progress')
+        .select('score')
+        .eq('user_id', user_id)
+        .eq('lab_id', lab_id)
+        .single();
+
+    temp = data;
+
     try {
-        let { data, error } = await db
-            .from('lab_progress')
-            .select('score')
-            .eq('user_id', user_id)
-            .eq('lab_id', lab_id)
-            .single();
-        temp = data;
 
         if (!temp) {
             const { data: newData, error: insertError } = await db
