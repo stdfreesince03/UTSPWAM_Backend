@@ -50,7 +50,7 @@ passport.use(
                 const state = JSON.parse(req.query.state);
                 const role = state.role;
 
-
+                let hawktuah = null;
                 const googleId = profile.id;
                 const firstName = profile.name?.givenName || 'John';
                 const lastName = profile.name?.familyName || 'Doe';
@@ -62,6 +62,8 @@ passport.use(
                     .select('*')
                     .eq('google_id', googleId)
                     .single();
+
+                hawktuah = user;
 
                 if (!user) {
                     const { data: newUser, error: insertError } = await db
@@ -79,12 +81,12 @@ passport.use(
                         return done(insertError, false);
                     }
 
-                    user = newUser;
+                    hawktuah = newUser;
                 }
 
                 const token = jsonwebtoken.sign(
                     {
-                        id: role === 'instructor' ? user.instructor_id : user.student_id,
+                        id: role === 'instructor' ? hawktuah.instructor_id : hawktuah.student_id,
                         role,
                         email: user.email,
                     },
