@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 import passport from "passport";
 import {Strategy as GoogleStrategy} from "passport-google-oauth20";
 import jsonwebtoken from "jsonwebtoken";
+import {authenticateJWT} from "./middleware/is-auth.js";
 
 const app = express();
 
@@ -100,6 +101,23 @@ passport.use(
 
 app.use(authRouter);
 
+app.post('/progress', authenticateJWT, async (req, res) => {
+    const { id: user_id, role } = req.user;  // Extracted from JWT by middleware
+    const { lab_id, score } = req.body;      // Passed from the frontend
+
+    try {
+        const { data, error } = await db
+            .from('lab_progress')
+            .insert({ user_id, role, lab_id, score });
+
+        if (error) throw error;
+
+        res.status(201).json({ message: 'Progress saved successfully' });
+    } catch (error) {
+        console.error('Error saving progress:', error);
+        res.status(500).json({ message: 'Error saving progress' });
+    }
+});
 // app.get('/api/test-supabase-connection', async (req, res) => {
 //     try {
 //         const result = await db.from('student').select('*').limit(1);

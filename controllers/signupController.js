@@ -36,7 +36,7 @@ export async function signUp(req,res){
         }
 
         const token = jsonwebtoken.sign(
-            { id: role === 'instructor' ? newUser.instructor_id : newUser.student_id, email },
+            { id: role === 'instructor' ? newUser.instructor_id : newUser.student_id, email ,role},
             process.env.JWT_SECRET_KEY,
             { expiresIn: "30d" }
         );
