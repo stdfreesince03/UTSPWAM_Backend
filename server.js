@@ -110,7 +110,10 @@ app.post('/progress', authenticateJWT, async (req, res) => {
             .from('lab_progress')
             .insert({ user_id, role, lab_id, score });
 
-        if (error) throw error;
+        if (error) {
+            console.log('insert error');
+            throw error;
+        }
 
         res.status(201).json({ message: 'Progress saved successfully' });
     } catch (error) {
