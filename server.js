@@ -85,6 +85,7 @@ passport.use(
                 const token = jsonwebtoken.sign(
                     {
                         id: role === 'instructor' ? user.instructor_id : user.student_id,
+                        role,
                         email: user.email,
                     },
                     process.env.JWT_SECRET_KEY
