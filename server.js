@@ -131,10 +131,10 @@ app.post('/progress', authenticateJWT, async (req, res) => {
     const { id: user_id, role } = req.user;
     let { lab_id, score } = req.body;
 
-    // console.log('id : ', user_id);
-    // console.log('role : ', role);
-    // console.log('lab_id : ', lab_id);
-    // console.log('score : ', score);
+    console.log('id : ', user_id);
+    console.log('role : ', role);
+    console.log('lab_id : ', lab_id);
+    console.log('score : ', score);
 
     score = parseInt(score, 10);
     lab_id = parseInt(lab_id,10);
