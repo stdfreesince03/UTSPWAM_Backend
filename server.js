@@ -105,10 +105,15 @@ app.post('/progress', authenticateJWT, async (req, res) => {
     const { id: user_id, role } = req.user;  // Extracted from JWT by middleware
     const { lab_id, score } = req.body;      // Passed from the frontend
 
+    console.log('id : ', user_id);
+    console.log('role : ', role);
+    console.log('lab_id : ', lab_id);
+    console.log('score : ', score);
     try {
         const { data, error } = await db
             .from('lab_progress')
-            .insert({ user_id, role, lab_id, score });
+            .upsert({ user_id, role, lab_id, score }
+                .select();
 
         if (error) {
             console.log('insert error');
