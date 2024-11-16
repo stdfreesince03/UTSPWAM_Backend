@@ -104,38 +104,78 @@ passport.use(
 
 app.use(authRouter);
 
-app.get('/progress/:labID',authenticateJWT,async(req,res,next) => {
+// app.get('/progress/:labID',authenticateJWT,async(req,res,next) => {
+//     const { id: user_id } = req.user;
+//     const { labID: lab_id } = req.params;
+//
+//     let temp = null;
+//
+//     let { data, error } = await db
+//         .from('lab_progress')
+//         .select('score')
+//         .eq('user_id', user_id)
+//         .eq('lab_id', lab_id)
+//         .single();
+//
+//     temp = data;
+//
+//     try {
+//
+//         if (!temp) {
+//             const { data: newData, error: insertError } = await db
+//                 .from('lab_progress')
+//                 .upsert({ user_id, lab_id, score: 0 })
+//                 .select('score');
+//
+//             if (insertError) throw insertError;
+//             temp = newData;
+//         }
+//
+//         res.status(200).json({ score: temp.score });
+//     } catch (error) {
+//         console.error('Error fetching progress:', error);
+//         res.status(500).json({ message: 'Error fetching progress' });
+//     }
+// });
+
+app.get('/progress/:labID', authenticateJWT, async (req, res, next) => {
     const { id: user_id } = req.user;
     const { labID: lab_id } = req.params;
-
     let temp = null;
 
-    let { data, error } = await db
-        .from('lab_progress')
-        .select('score')
-        .eq('user_id', user_id)
-        .eq('lab_id', lab_id)
-        .single();
-
-    temp = data;
-
     try {
+        const { data, error } = await db
+            .from('lab_progress')
+            .select('score')
+            .eq('user_id', user_id)
+            .eq('lab_id', lab_id)
+            .single();
 
-        if (!temp) {
+        if (error) throw error; // Throw if there's an error in select
+
+        temp = data;
+    } catch (selectError) {
+        console.error('Error fetching existing progress:', selectError);
+        return res.status(500).json({ message: 'Error fetching existing progress' });
+    }
+
+    if (!temp) {
+        try {
             const { data: newData, error: insertError } = await db
                 .from('lab_progress')
                 .upsert({ user_id, lab_id, score: 0 })
                 .select('score');
 
             if (insertError) throw insertError;
-            temp = newData;
-        }
 
-        res.status(200).json({ score: temp.score });
-    } catch (error) {
-        console.error('Error fetching progress:', error);
-        res.status(500).json({ message: 'Error fetching progress' });
+            temp = newData;
+        } catch (upsertError) {
+            console.error('Error inserting new progress:', upsertError);
+            return res.status(500).json({ message: 'Error inserting new progress' });
+        }
     }
+
+    res.status(200).json({ score: temp.score });
 });
 
 app.post('/progress', authenticateJWT, async (req, res) => {
