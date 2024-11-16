@@ -123,7 +123,7 @@ app.post('/progress', authenticateJWT, async (req, res) => {
         res.status(201).json({ message: 'Progress saved successfully' });
     } catch (error) {
         console.error('Error saving progress:', error);
-        res.status(500).json({ message: 'Error saving progress' });
+        res.status(500).json({ message: 'Error saving progress BITCH' });
     }
 });
 // app.get('/api/test-supabase-connection', async (req, res) => {
