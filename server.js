@@ -36,6 +36,10 @@ app.use((req, res, next) => {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use('/fonts', express.static(path.join(__dirname, 'fonts')));
 
+app.get('/ping', (req, res) => {
+    res.status(200).json({ message: 'Server is alive!' });
+});
+
 passport.use(
     new GoogleStrategy(
         {
